@@ -10,3 +10,5 @@ Right output: [(2, (0.24, inf)), (1, (-0.03, 0.06)), (0, (-0.15, inf)), (0, (-0.
 '''
 pd = surf.st.persistence(homology_coeff_field=2, persistence_dim_max=2)
 print(pd)
+
+surf._output_header()
