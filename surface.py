@@ -25,7 +25,7 @@ class Surface:
         self._pi_res = 50
         self._pi_max = 0.4
         self._pi_min = -0.4
-        self._pi = []
+        self._pi = [0.0 for i in range(len(self._proj_dirs))]
 
     def _output_header(self):
         with open(self._output_file, "w+", newline='') as csvfile:
@@ -43,26 +43,12 @@ class Surface:
         with open(self._output_file, "a") as csvfile:
             csvwriter = csv.writer(csvfile) 
             for i in range(len(self._proj_dirs)):
-                self._update_heights(i)
-                self._update_st()
-                self._compute_persistence()
-                self._compute_pi()
-                np.savetxt(csvfile, np.reshape(self._pi[0], [self._pi_res, self._pi_res]))
+                self.compute_pi(i)
+                np.savetxt(csvfile, np.reshape(self._pi[i][0], [self._pi_res, self._pi_res]))
                 csvwriter.writerow(["=========="])
 
     def _compute_persistence(self):
         self.st.compute_persistence(homology_coeff_field=2, persistence_dim_max=2)
-    
-    def _compute_pi(self):
-        preproc = gd.representations.preprocessing.DiagramSelector(use=True, limit=1000)
-        PI = gd.representations.PersistenceImage(bandwidth=self._pi_bw, weight=lambda x: x[1]**2, \
-                                                im_range=[self._pi_min,self._pi_max,self._pi_min,self._pi_max], resolution=[self._pi_res,self._pi_res])
-        self._pi = PI.fit_transform(preproc.transform([self.st.persistence_intervals_in_dimension(0)]))
-        '''
-        plt.imshow(np.flip(np.reshape(self._pi[0], [self._pi_res,self._pi_res]), 0))
-        plt.title("Persistence Image")
-        plt.show()
-        '''
         
     def _normalize_dirs(self):
         for i in range(len(self._proj_dirs)):
@@ -122,4 +108,19 @@ class Surface:
         self._proj_dirs = dirs
         self._num_dirs = len(self._proj_dirs)
         self._normalize_dirs()
+        self._pi = [0.0 for i in range(len(self._proj_dirs))]
 
+    def compute_pi(self,i):
+        self._update_heights(i)
+        self._update_st()
+        self._compute_persistence()
+
+        preproc = gd.representations.preprocessing.DiagramSelector(use=True, limit=1000)
+        PI = gd.representations.PersistenceImage(bandwidth=self._pi_bw, weight=lambda x: x[1]**2, \
+                                                im_range=[self._pi_min,self._pi_max,self._pi_min,self._pi_max], resolution=[self._pi_res,self._pi_res])
+        self._pi[i] = PI.fit_transform(preproc.transform([self.st.persistence_intervals_in_dimension(0)]))
+        '''
+        plt.imshow(np.flip(np.reshape(self._pi[0], [self._pi_res,self._pi_res]), 0))
+        plt.title("Persistence Image")
+        plt.show()
+        '''
