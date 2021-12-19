@@ -1,8 +1,12 @@
 from obj_loader import *
+
 import gudhi as gd
+import gudhi.representations
+
 import numpy as np
 import math
 import csv
+import matplotlib.pyplot as plt
 
 class Surface:
 
@@ -21,9 +25,10 @@ class Surface:
         self._pi_res = 50
         self._pi_max = 0.4
         self._pi_min = -0.4
+        self._pi = []
 
     def _output_header(self):
-        with open(self._output_file, "w+") as csvfile:
+        with open(self._output_file, "w+", newline='') as csvfile:
             csvwriter = csv.writer(csvfile) 
             csvwriter.writerow(["==Header begins=="])
             csvwriter.writerow(["PI bw", "PI res", "PI max", "PI min"])
@@ -32,10 +37,33 @@ class Surface:
             for row in self._proj_dirs:
                 csvwriter.writerow(row)
             csvwriter.writerow(["==Header ends=="])
+            csvwriter.writerow([])
     
+    def _output_pi(self):
+        with open(self._output_file, "a") as csvfile:
+            csvwriter = csv.writer(csvfile) 
+            for i in range(len(self._proj_dirs)):
+                self._update_heights(i)
+                self._update_st()
+                self._compute_persistence()
+                self._compute_pi()
+                np.savetxt(csvfile, np.reshape(self._pi[0], [self._pi_res, self._pi_res]))
+                csvwriter.writerow(["=========="])
+
     def _compute_persistence(self):
         self.st.compute_persistence(homology_coeff_field=2, persistence_dim_max=2)
-
+    
+    def _compute_pi(self):
+        preproc = gd.representations.preprocessing.DiagramSelector(use=True, limit=1000)
+        PI = gd.representations.PersistenceImage(bandwidth=self._pi_bw, weight=lambda x: x[1]**2, \
+                                                im_range=[self._pi_min,self._pi_max,self._pi_min,self._pi_max], resolution=[self._pi_res,self._pi_res])
+        self._pi = PI.fit_transform(preproc.transform([self.st.persistence_intervals_in_dimension(0)]))
+        '''
+        plt.imshow(np.flip(np.reshape(self._pi[0], [self._pi_res,self._pi_res]), 0))
+        plt.title("Persistence Image")
+        plt.show()
+        '''
+        
     def _normalize_dirs(self):
         for i in range(len(self._proj_dirs)):
             norm = math.sqrt((self._proj_dirs[i][0])**2 
@@ -55,6 +83,9 @@ class Surface:
         for i in range(f):
             self.st.insert(self.faces[i][:])
 
+    '''
+    A call to this function should be followed by a call to _update_st()
+    '''
     def _update_heights(self, dir_ind = 0):
         direction = self._proj_dirs[dir_ind]
         self._heights = [0.0 for i in range(len(self.vertices))]

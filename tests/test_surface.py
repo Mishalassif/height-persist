@@ -12,3 +12,13 @@ pd = surf.st.persistence(homology_coeff_field=2, persistence_dim_max=2)
 print(pd)
 
 surf._output_header()
+surf._compute_pi()
+surf._output_pi()
+
+pdir = [[0, 0, 1], [0, 1, 0], [1, 0, 0]]
+surf.set_proj_dirs(pdir)
+surf._output_header()
+surf._compute_pi()
+surf._output_pi()
+pd = surf.st.persistence(homology_coeff_field=2, persistence_dim_max=2)
+print(pd)
