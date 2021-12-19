@@ -27,8 +27,8 @@ class Surface:
         self._pi_min = -0.4
         self._pi = [[0.0 for i in range(len(self._proj_dirs))] for j in range(2)]
 
-        self._pl_res = 1000
-        self._pl_num = 8
+        self._pl_res = 100
+        self._pl_num = 5
         self._pl = [[0.0 for i in range(len(self._proj_dirs))] for j in range(2)]
 
 
