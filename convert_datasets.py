@@ -29,20 +29,10 @@ def create_feature_dir(root_dir = 'datasets', features_dir = 'features'):
             create_feature_dir(full_path, full_feature_path)
 
 create_feature_dir()
-
-#Problematic inputs
-#list_obj = get_all_obj('datasets/shrec_16/bird1')
-#list_obj = get_all_obj('datasets/shrec_16/camel/train')
-#list_obj = get_all_obj('datasets/shrec_16/cat/train')
-#list_obj = get_all_obj('datasets/shrec_16/dinosaur')
-#list_obj = get_all_obj('datasets/shrec_16/glasses')
-#list_obj = get_all_obj('datasets/shrec_16/gorilla/train')
-#list_obj = get_all_obj('datasets/shrec_16')
-
 list_obj = get_all_obj('datasets/shrec_16')
 
 print(list_obj)
-pdir = fibonacci_semisphere(4)
+pdir = fibonacci_semisphere(20)
 
 for i in range(len(list_obj)):
     list_obj[i] = list_obj[i][9:]
