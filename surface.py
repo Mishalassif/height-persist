@@ -26,6 +26,10 @@ class Surface:
         self._pi_res = 50
         self._pi_max = 0.4
         self._pi_min = -0.4
+        '''
+        self._pi_max = 1.0
+        self._pi_min = -1.0
+        '''
         self._pi = [[0.0 for i in range(len(self._proj_dirs))] for j in range(2)]
 
         self._pl_res = 100
@@ -124,10 +128,16 @@ class Surface:
         preproc = gd.representations.preprocessing.DiagramSelector(use=True, limit=1000)
         PI = gd.representations.PersistenceImage(bandwidth=self._pi_bw, weight=lambda x: x[1]**2, \
                                                 im_range=[self._pi_min,self._pi_max,self._pi_min,self._pi_max], resolution=[self._pi_res,self._pi_res])
-        self._pi[0][i] = PI.fit_transform(preproc.transform([self.st.persistence_intervals_in_dimension(0)]))
-        self._pi[1][i] = PI.fit_transform(preproc.transform([self.st.persistence_intervals_in_dimension(1)]))
+        if len(preproc.transform([self.st.persistence_intervals_in_dimension(0)])[0]) == 0:
+            self._pi[0][i] = [np.zeros((1, self._pi_res*self._pi_res))]
+        else:
+            self._pi[0][i] = PI.fit_transform(preproc.transform([self.st.persistence_intervals_in_dimension(0)]))
+        if len(preproc.transform([self.st.persistence_intervals_in_dimension(1)])[0]) == 0:
+            self._pi[1][i] = [np.zeros((1, self._pi_res*self._pi_res))]
+        else:
+            self._pi[1][i] = PI.fit_transform(preproc.transform([self.st.persistence_intervals_in_dimension(1)]))
         '''
-        plt.imshow(np.flip(np.reshape(self._pi[0], [self._pi_res,self._pi_res]), 0))
+        plt.imshow(np.flip(np.reshape(self._pi[0][i][0], [self._pi_res,self._pi_res]), 0))
         plt.title("Persistence Image")
         plt.show()
         '''
@@ -139,12 +149,18 @@ class Surface:
 
         preproc = gd.representations.preprocessing.DiagramSelector(use=True, limit=1000)
         PL = gd.representations.Landscape(num_landscapes=self._pl_num, resolution=self._pl_res)
-        self._pl[0][i] = PL.fit_transform(preproc.transform([self.st.persistence_intervals_in_dimension(0)]))
-        self._pl[1][i] = PL.fit_transform(preproc.transform([self.st.persistence_intervals_in_dimension(1)]))
+        if len(preproc.transform([self.st.persistence_intervals_in_dimension(0)])[0]) == 0:
+            self._pl[0][i] = np.zeros((1, self._pl_res*self._pl_num))
+        else:
+            #print(self.st.persistence_intervals_in_dimension(0))
+            self._pl[0][i] = PL.fit_transform(preproc.transform([self.st.persistence_intervals_in_dimension(0)]))
+        if len(preproc.transform([self.st.persistence_intervals_in_dimension(1)])[0]) == 0:
+            self._pl[1][i] = np.zeros((1, self._pl_res*self._pl_num))
+        else:
+            self._pl[1][i] = PL.fit_transform(preproc.transform([self.st.persistence_intervals_in_dimension(1)]))
         '''
-        plt.plot(L[0][:1000])
-        plt.plot(L[0][1000:2000])
-        plt.plot(L[0][2000:3000])
+        plt.plot(self._pl[0][i][0][:self._pl_res])
+        plt.plot(self._pl[0][i][0][self._pl_res:2*self._pl_res])
         plt.title("Landscape")
         plt.show()
         '''
