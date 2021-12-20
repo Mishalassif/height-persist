@@ -33,8 +33,8 @@ class Surface:
         self._pl = [[0.0 for i in range(len(self._proj_dirs))] for j in range(2)]
 
 
-    def _output_header(self):
-        with open(self._output_file, "w+", newline='') as csvfile:
+    def _output_header(self, output_file):
+        with open(output_file, "w", newline='') as csvfile:
             csvwriter = csv.writer(csvfile) 
             csvwriter.writerow(["==Header begins=="])
             csvwriter.writerow(["PI bw", "PI res", "PI max", "PI min"])
@@ -104,7 +104,7 @@ class Surface:
     def set_input_filename(self, filename):
         self._input_file = filename
         self._obj_loader = ObjLoader(filename+".obj")
-        self._output_file = self._input_file + "_out.csv"
+        self._output_file = self._input_file
 
     def set_output_directory(self, filename):
         self._output_dir = filename
@@ -150,9 +150,9 @@ class Surface:
         '''
     
     def output_pi(self):
-        self._output_file = self._output_dir + self._input_file + "_pi.csv"
-        self._output_header()
-        with open(self._output_file, "a") as csvfile:
+        output_file = self._output_dir + self._output_file + "_pi.csv"
+        self._output_header(output_file)
+        with open(output_file, "a") as csvfile:
             csvwriter = csv.writer(csvfile) 
             for i in range(len(self._proj_dirs)):
                 self.compute_pi(i)
@@ -160,9 +160,9 @@ class Surface:
                 csvwriter.writerow(["=====PI====="])
 
     def output_pl(self):
-        self._output_file = self._output_dir + self._input_file + "_pl.csv"
-        self._output_header()
-        with open(self._output_file, "a") as csvfile:
+        output_file = self._output_dir + self._output_file + "_pl.csv"
+        self._output_header(output_file)
+        with open(output_file, "a") as csvfile:
             csvwriter = csv.writer(csvfile) 
             for i in range(len(self._proj_dirs)):
                 self.compute_pl(i)

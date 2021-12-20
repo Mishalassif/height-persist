@@ -41,13 +41,11 @@ for i in range(len(pdir)):
 surf.set_input_filename("T149")
 surf.update_surface()
 surf.set_output_directory("output/")
-surf._compute_persistence()
 surf.output_pi()
 surf.output_pl()
 
 surf.set_input_filename("T124")
 surf.update_surface()
 surf.set_output_directory("output/")
-surf._compute_persistence()
 surf.output_pi()
 surf.output_pl()
