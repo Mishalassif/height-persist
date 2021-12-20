@@ -15,4 +15,5 @@
 *.nav
 *.snm
 *.toc
-*.OBJ
+*.obj
+*.csv
