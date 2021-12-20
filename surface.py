@@ -106,8 +106,8 @@ class Surface:
         self._obj_loader = ObjLoader(filename+".obj")
         self._output_file = self._input_file
 
-    def set_output_directory(self, filename):
-        self._output_dir = filename
+    def set_output_filename(self, filename):
+        self._output_file = filename
 
     def set_proj_dirs(self, dirs):
         self._proj_dirs = dirs
@@ -150,7 +150,7 @@ class Surface:
         '''
     
     def output_pi(self):
-        output_file = self._output_dir + self._output_file + "_pi.csv"
+        output_file = self._output_file + "_pi.csv"
         self._output_header(output_file)
         with open(output_file, "a") as csvfile:
             csvwriter = csv.writer(csvfile) 
@@ -160,7 +160,7 @@ class Surface:
                 csvwriter.writerow(["=====PI====="])
 
     def output_pl(self):
-        output_file = self._output_dir + self._output_file + "_pl.csv"
+        output_file = self._output_file + "_pl.csv"
         self._output_header(output_file)
         with open(output_file, "a") as csvfile:
             csvwriter = csv.writer(csvfile) 

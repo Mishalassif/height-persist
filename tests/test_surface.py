@@ -14,7 +14,6 @@ print(pd)
 
 surf.set_input_filename("T124")
 surf.update_surface()
-surf.set_output_directory("output/")
 surf._compute_persistence()
 '''
 Right output(124): [(2, (0.31, inf)), (1, (0.25, inf)), (1, (0.24, inf)), (1, (-0.02, 0.27)), (1, (0.04, 0.3)), (1, (-0.01, 0.22)), (1, (0.02, 0.24)), (1, (-0.03, 0.15)), (1, (0.15, 0.27)), (1, (0.16, 0.28)), (1, (0.08, 0.15)), (1, (-0.01, 0.03)), (1, (0.17, 0.2)), (1, (0.08, 0.1)), (1, (-0.63, -0.62)), (1, (0.08, 0.09)), (0, (-0.67, inf)), (0, (-0.1, -0.03)), (0, (-0.36, -0.3)), (0, (0.22, 0.24))]
@@ -40,12 +39,12 @@ for i in range(len(pdir)):
 
 surf.set_input_filename("T149")
 surf.update_surface()
-surf.set_output_directory("output/")
+surf.set_output_filename("output/T149")
 surf.output_pi()
 surf.output_pl()
 
 surf.set_input_filename("T124")
 surf.update_surface()
-surf.set_output_directory("output/")
+surf.set_output_filename("output/T124")
 surf.output_pi()
 surf.output_pl()
