@@ -17,6 +17,7 @@ class Surface:
         
         self._input_file = ""
         self._output_file = self._input_file + "_out.csv"
+        self._output_dir = ""
         self._proj_dirs = [[0,0,1]]
         self._num_dirs = 0
         self._heights = []
@@ -88,18 +89,25 @@ class Surface:
                 self.st.assign_filtration(sk_value[0], max([self._heights[sk_value[0][0]], 
                     self._heights[sk_value[0][1]], self._heights[sk_value[0][2]]]))
 
+    def _clear_st(self):
+        self.st = gd.SimplexTree()
+
     def update_surface(self):
         if self._input_file == "":
             print("Please enter an input OBJ file name")
         else:
+            self._clear_st()
             self._update_obj()
             self._update_heights()
             self._update_st()
             
-    def set_filename(self, filename):
+    def set_input_filename(self, filename):
         self._input_file = filename
-        self._obj_loader = ObjLoader(filename)
+        self._obj_loader = ObjLoader(filename+".obj")
         self._output_file = self._input_file + "_out.csv"
+
+    def set_output_directory(self, filename):
+        self._output_dir = filename
 
     def set_proj_dirs(self, dirs):
         self._proj_dirs = dirs
@@ -142,6 +150,8 @@ class Surface:
         '''
     
     def output_pi(self):
+        self._output_file = self._output_dir + self._input_file + "_pi.csv"
+        self._output_header()
         with open(self._output_file, "a") as csvfile:
             csvwriter = csv.writer(csvfile) 
             for i in range(len(self._proj_dirs)):
@@ -150,6 +160,8 @@ class Surface:
                 csvwriter.writerow(["=====PI====="])
 
     def output_pl(self):
+        self._output_file = self._output_dir + self._input_file + "_pl.csv"
+        self._output_header()
         with open(self._output_file, "a") as csvfile:
             csvwriter = csv.writer(csvfile) 
             for i in range(len(self._proj_dirs)):
