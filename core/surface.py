@@ -1,4 +1,4 @@
-from obj_loader import *
+from core.obj_loader import *
 
 import gudhi as gd
 import gudhi.representations

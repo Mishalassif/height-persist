@@ -1,5 +1,5 @@
-from surface import *
-from sphere_sampler import *
+from core.surface import *
+from core.sphere_sampler import *
 
 surf = Surface()
 surf.set_input_filename("T149")
