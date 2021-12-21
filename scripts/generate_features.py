@@ -1,20 +1,10 @@
 import os
 from core.surface import *
 from core.sphere_sampler import *
+from core.obj_utils import *
 
 root_dir = '../datasets'
 features_dir = '../features'
-
-def get_all_obj(root_dir):
-    list_of_files = os.listdir(root_dir)
-    list_of_obj = list()
-    for entry in list_of_files:
-        full_path = os.path.join(root_dir, entry)
-        if os.path.isdir(full_path):
-            list_of_obj = list_of_obj + get_all_obj(full_path)
-        elif full_path[-4:] == '.obj':
-            list_of_obj.append(full_path[:-4])
-    return list_of_obj
 
 def create_feature_dir(root_dir = '../datasets', features_dir = '../features'):
     if os.path.isdir(features_dir) == False:
@@ -32,7 +22,7 @@ create_feature_dir()
 list_obj = get_all_obj('../datasets/shrec_16')
 
 print(list_obj)
-pdir = fibonacci_semisphere(4)
+pdir = fibonacci_semisphere(1)
 
 for i in range(len(list_obj)):
     list_obj[i] = list_obj[i][12:]
@@ -40,10 +30,16 @@ for i in range(len(list_obj)):
 surf = Surface()
 surf.set_proj_dirs(pdir)
 
-for obj_file in list_obj:
-    surf.set_input_filename('../datasets/' + obj_file)
-    surf.set_output_filename('../features/' + obj_file)
-    surf.update_surface()
-    surf.output_pi()
-    surf.output_pl()
-    print('Featurized ' + obj_file + ' successfully !!!!')
+cont = ''
+cont = input("About to overwrite the features folder, are you sure you want to continue? (y/n)")
+
+if cont == 'y':
+    for obj_file in list_obj:
+        surf.set_input_filename('../datasets/' + obj_file)
+        surf.set_output_filename('../features/' + obj_file)
+        surf.update_surface()
+        surf.output_pi()
+        surf.output_pl()
+        print('Featurized ' + obj_file + ' successfully !!!!')
+else:
+    print("Aborting")
