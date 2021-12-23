@@ -10,17 +10,17 @@ from sklearn.model_selection import StratifiedKFold
 
 feature = 'pl'
 test_model = True
+online = False
+
 classes = ['alien', 'ants', 'armadillo', 'bird1', 'bird2', 'camel',
         'cat', 'centaur', 'dinosaur', 'dino_ske', 'dog1', 'dog2',
         'flamingo', 'glasses', 'gorilla', 'hand', 'horse', 'lamp',
         'man', 'myScissor', 'octopus', 'pliers', 'rabbit', 'santa',
         'shark', 'snake', 'spiders', 'two_balls', 'woman']
-
 classes = classes[:30]
 
-#classes = ['alien', 'ants', 'armadillo', 'bird2']
-#classes = ['alien', 'ants', 'armadillo', 'camel']
 root_dir = '../datasets/shrec_16'
+feature_dir = '../features/shrec_16'
 
 n_dirs = 20
 
@@ -31,6 +31,7 @@ surf.set_proj_dirs(pdir)
 
 feature_list = []
 label_list = []
+
 if feature == 'pl':
     feature_dim = surf._pl_res*surf._pl_num
 else:
@@ -44,19 +45,27 @@ for i in range(len(classes)):
         if obj_file[:5] == '/test':
             continue
         embedding = [0.0 for i in range(2*n_dirs*feature_dim)]
-        surf.set_input_filename(root_dir + '/' + classes[i] + '/' + obj_file)
-        surf.update_surface()
-        for j in range(n_dirs):
-            if feature == 'pl':
-                surf.compute_pl(j)
-                embedding[2*j*feature_dim:(2*j+1)*feature_dim] = surf._pl[0][j][0]
-                embedding[(2*j+1)*feature_dim:(2*j+2)*feature_dim] = surf._pl[1][j][0]
-            else:
-                surf.compute_pi(j)
-                embedding[2*j*feature_dim:(2*j+1)*feature_dim] = surf._pi[0][j][0]
-                embedding[(2*j+1)*feature_dim:(2*j+2)*feature_dim] = surf._pi[1][j][0]
-        feature_list.append(embedding)
-        label_list.append(i)
+        if online == True:
+            embedding = [0.0 for i in range(2*n_dirs*feature_dim)]
+            surf.set_input_filename(root_dir + '/' + classes[i] + '/' + obj_file)
+            surf.update_surface()
+            for j in range(n_dirs):
+                if feature == 'pl':
+                    surf.compute_pl(j)
+                    embedding[2*j*feature_dim:(2*j+1)*feature_dim] = surf._pl[0][j][0]
+                    embedding[(2*j+1)*feature_dim:(2*j+2)*feature_dim] = surf._pl[1][j][0]
+                else:
+                    surf.compute_pi(j)
+                    embedding[2*j*feature_dim:(2*j+1)*feature_dim] = surf._pi[0][j][0]
+                    embedding[(2*j+1)*feature_dim:(2*j+2)*feature_dim] = surf._pi[1][j][0]
+            feature_list.append(embedding)
+            label_list.append(i)
+        else:
+            header_len = surf._header_len
+            embedding = np.genfromtxt(feature_dir + '/' + classes[i] + obj_file + '_' + feature + '.csv', delimiter='\n', skip_header=header_len)
+            #print(embedding)
+            feature_list.append(embedding)
+            label_list.append(i)
         print('Featurized ' + obj_file + ' successfully !!!!')
     print('Completed featurizing ' + classes[i])
 
@@ -65,7 +74,6 @@ print('Completed featurizing train data')
 model = RandomForestClassifier(random_state=1)
 scores = cross_val_score(model, feature_list, label_list, cv=3)
 print("%0.2f 3-fold cv accuracy with a standard deviation of %0.2f" % (scores.mean(), scores.std()))
-
 
 if test_model == True:
     model.fit(feature_list, label_list)
@@ -81,21 +89,29 @@ if test_model == True:
             if obj_file[:5] != '/test':
                 continue
             embedding = [0.0 for i in range(2*n_dirs*feature_dim)]
-            surf.set_input_filename(root_dir + '/' + classes[i] + '/' + obj_file)
-            surf.update_surface()
-            for j in range(n_dirs):
-                if feature == 'pl':
-                    surf.compute_pl(j)
-                    embedding[2*j*feature_dim:(2*j+1)*feature_dim] = surf._pl[0][j][0]
-                    embedding[(2*j+1)*feature_dim:(2*j+2)*feature_dim] = surf._pl[1][j][0]
-                if feature == 'pi':
-                    surf.compute_pi(j)
-                    embedding[2*j*feature_dim:(2*j+1)*feature_dim] = surf._pi[0][j][0]
-                    embedding[(2*j+1)*feature_dim:(2*j+2)*feature_dim] = surf._pi[1][j][0]
-            test_feature_list.append(embedding)
-            test_label_list.append(i)
-            pred_label_list.append(model.predict([embedding]))
-            #print(model.predict([embedding]))
+            if online == True:
+                surf.set_input_filename(root_dir + '/' + classes[i] + '/' + obj_file)
+                surf.update_surface()
+                for j in range(n_dirs):
+                    if feature == 'pl':
+                        surf.compute_pl(j)
+                        embedding[2*j*feature_dim:(2*j+1)*feature_dim] = surf._pl[0][j][0]
+                        embedding[(2*j+1)*feature_dim:(2*j+2)*feature_dim] = surf._pl[1][j][0]
+                    if feature == 'pi':
+                        surf.compute_pi(j)
+                        embedding[2*j*feature_dim:(2*j+1)*feature_dim] = surf._pi[0][j][0]
+                        embedding[(2*j+1)*feature_dim:(2*j+2)*feature_dim] = surf._pi[1][j][0]
+                test_feature_list.append(embedding)
+                test_label_list.append(i)
+                pred_label_list.append(model.predict([embedding]))
+            else:
+                header_len = surf._header_len
+                embedding = np.genfromtxt(feature_dir + '/' + classes[i] + obj_file + '_' + feature + '.csv', delimiter='\n', skip_header=header_len)
+                #print(embedding)
+                test_feature_list.append(embedding)
+                test_label_list.append(i)
+                pred_label_list.append(model.predict([embedding]))
+                #print(model.predict([embedding]))
             print('Featurized ' + obj_file + ' test data successfully !!!!')
         print('Completed featurizing ' + classes[i] + ' test data')
 

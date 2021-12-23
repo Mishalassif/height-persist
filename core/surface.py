@@ -18,6 +18,7 @@ class Surface:
         self._input_file = ""
         self._output_file = self._input_file + "_out.csv"
         self._output_dir = ""
+        self._header_len = 0
         self._proj_dirs = [[0,0,1]]
         self._num_dirs = 0
         self._heights = []
@@ -36,7 +37,7 @@ class Surface:
         self._pl_num = 5
         self._pl = [[0.0 for i in range(len(self._proj_dirs))] for j in range(2)]
 
-
+        self._global_2_hom = 0
     def _output_header(self, output_file):
         with open(output_file, "w", newline='') as csvfile:
             csvwriter = csv.writer(csvfile) 
@@ -119,6 +120,7 @@ class Surface:
         self._normalize_dirs()
         self._pi = [[0.0 for i in range(len(self._proj_dirs))] for j in range(2)]
         self._pl = [[0.0 for i in range(len(self._proj_dirs))] for j in range(2)]
+        self._header_len = 6 + self._num_dirs
 
     def compute_pi(self,i):
         self._update_heights(i)
@@ -178,6 +180,7 @@ class Surface:
                 self.compute_pi(i)
                 #np.savetxt(csvfile, np.reshape(self._pi[0][i][0], [self._pi_res, self._pi_res]))
                 np.savetxt(csvfile, self._pi[0][i][0])
+                np.savetxt(csvfile, self._pi[1][i][0])
                 #csvwriter.writerow(["=====PI====="])
 
     def output_pl(self):
@@ -189,5 +192,6 @@ class Surface:
                 self.compute_pl(i)
                 #np.savetxt(csvfile, np.reshape(self._pl[0][i][0], [self._pl_num, self._pl_res]))
                 np.savetxt(csvfile, self._pl[0][i][0])
+                np.savetxt(csvfile, self._pl[1][i][0])
                 #csvwriter.writerow(["=====PL====="])
 
