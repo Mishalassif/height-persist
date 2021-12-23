@@ -1,13 +1,12 @@
 import os
-import string
 
 class OffLoader(object):
     def __init__(self, fileName):
         self.vertices = []
         self.faces = []
+        self.edges = []
         try:
             f = open(fileName)
-            print('File open')
             line_counter = 0
             num_v = 0
             num_f = 0
@@ -21,8 +20,6 @@ class OffLoader(object):
                     index3 = line.find(" ", index2 + 1)
                     num_v = int(line[:index1])
                     num_f = int(line[index1:index2])
-                    print("Number of vertices: " + str(num_v))
-                    print("Number of faces: " + str(num_f))
                     line_counter = line_counter + 1
                     continue
                 
@@ -30,14 +27,20 @@ class OffLoader(object):
                     index1 = line.find(" ") + 1
                     index2 = line.find(" ", index1 + 1)
                     index3 = line.find(" ", index2 + 1)
-                    print(line)
                     vertex = (float(line[:index1]), float(line[index1:index2]), float(line[index2:index3]))
                     vertex = [round(vertex[0], 2), round(vertex[1], 2), round(vertex[2], 2)]
                     self.vertices.append(vertex)
                 else:
-                    string = line.replace("//", "/")
-                    i = string.find(" ") + 1
-                    face = []
+                    index1 = line.find(" ") + 1
+                    index2 = line.find(" ", index1 + 1)
+                    index3 = line.find(" ", index2 + 1)
+                    if int(line[0]) == 3:
+                        face = [int(line[index1:index2]), int(line[index2:index3]), int(line[index3:])]
+                        self.faces.append(face)
+                    elif int(line[0]) == 2:
+                        edge = [int(line[index1:index2]), int(line[index2:index3])]
+                        self.edges.append(edge)
+                    '''
                     for item in range(string.count(" ")):
                         if string.find(" ", i) == -1:
                             face.append(int(string[i:-1]))
@@ -45,9 +48,8 @@ class OffLoader(object):
                         face.append(int(string[i:string.find(" ", i)]))
                         i = string.find(" ", i) + 1
                     ##
-                    self.faces.append(list(face))
+                    '''
                 line_counter = line_counter + 1
-                print('Line counter updated to ' + str(line_counter))
             f.close()
         except IOError:
             print(".off file not found.")

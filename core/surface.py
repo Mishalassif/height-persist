@@ -1,4 +1,5 @@
 from core.obj_utils import *
+from core.off_utils import *
 
 import gudhi as gd
 import gudhi.representations
@@ -13,9 +14,11 @@ class Surface:
     def __init__(self):
         self.vertices = []
         self.faces = []
+        self.edges = []
         self.st = gd.SimplexTree()
         
         self._input_file = ""
+        self._input_extension = "obj"
         self._output_file = self._input_file + "_out.csv"
         self._output_dir = ""
         self._header_len = 0
@@ -25,10 +28,6 @@ class Surface:
 
         self._pi_bw = 1e-2
         self._pi_res = 20
-        '''
-        self._pi_max = 0.4
-        self._pi_min = -0.4
-        '''
         self._pi_max = 1.0
         self._pi_min = -1.0
         self._pi = [[0.0 for i in range(len(self._proj_dirs))] for j in range(2)]
@@ -64,12 +63,22 @@ class Surface:
     def _update_surf_from_file(self):
         self.vertices = self._file_loader.vertices
         self.faces = self._file_loader.faces
-        f = len(self._file_loader.faces)
+        if self._input_extension == "off":
+            self.edges = self._file_loader.edges
+        f = len(self.faces)
+        e = len(self.edges)
         for i in range(f):
             for j in range(3):
-                self.faces[i][j] = self.faces[i][j]-1
+                if self._input_extension == 'obj':
+                    self.faces[i][j] = self.faces[i][j]-1
+                elif self._input_extension == 'off':
+                    self.faces[i][j] = self.faces[i][j]
         for i in range(f):
             self.st.insert(self.faces[i][:])
+        #if self._input_extension == "off":
+        for i in range(e):
+            self.st.insert(self.edges[i][:])
+        self.st.assign_filtration([0], 10)
 
     '''
     A call to this function should be followed by a call to _update_st()
@@ -84,8 +93,7 @@ class Surface:
         v = len(self.vertices)
         for i in range(v):
             self.st.assign_filtration([i], self._heights[i])
-        
-        for sk_value in self.st.get_skeleton(3):
+        for sk_value in self.st.get_skeleton(2):
             if len(sk_value[0]) == 2:
                 self.st.assign_filtration(sk_value[0], max([self._heights[sk_value[0][0]], 
                     self._heights[sk_value[0][1]]]))
@@ -107,7 +115,8 @@ class Surface:
             
     def set_input_filename(self, filename, extension='obj'):
         self._input_file = filename
-        if extension == '.off':
+        self._input_extension = extension
+        if extension == 'off':
             self._file_loader = OffLoader(filename + ".off")
         else:
             self._file_loader = ObjLoader(filename + ".obj")
