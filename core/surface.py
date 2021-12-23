@@ -132,16 +132,12 @@ class Surface:
                                                 im_range=[self._pi_min,self._pi_max,self._pi_min,self._pi_max], resolution=[self._pi_res,self._pi_res])
         if len(preproc.transform([self.st.persistence_intervals_in_dimension(0)])[0]) == 0:
             self._pi[0][i] = np.array(np.zeros((1, self._pi_res*self._pi_res)))
-            #print(type(self._pi[0][i]))
         else:
             self._pi[0][i] = PI.fit_transform(preproc.transform([self.st.persistence_intervals_in_dimension(0)]))
-            #print(type(self._pi[0][i]))
         if len(preproc.transform([self.st.persistence_intervals_in_dimension(1)])[0]) == 0:
             self._pi[1][i] = np.array(np.zeros((1, self._pi_res*self._pi_res)))
-            #print(type(self._pi[0][i]))
         else:
             self._pi[1][i] = PI.fit_transform(preproc.transform([self.st.persistence_intervals_in_dimension(1)]))
-            #print(type(self._pi[0][i]))
         '''
         plt.imshow(np.flip(np.reshape(self._pi[0][i][0], [self._pi_res,self._pi_res]), 0))
         plt.title("Persistence Image")
