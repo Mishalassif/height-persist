@@ -23,16 +23,16 @@ class Surface:
         self._heights = []
 
         self._pi_bw = 1e-2
-        self._pi_res = 50
+        self._pi_res = 20
+        '''
         self._pi_max = 0.4
         self._pi_min = -0.4
         '''
         self._pi_max = 1.0
         self._pi_min = -1.0
-        '''
         self._pi = [[0.0 for i in range(len(self._proj_dirs))] for j in range(2)]
 
-        self._pl_res = 100
+        self._pl_res = 30
         self._pl_num = 5
         self._pl = [[0.0 for i in range(len(self._proj_dirs))] for j in range(2)]
 
@@ -41,9 +41,9 @@ class Surface:
         with open(output_file, "w", newline='') as csvfile:
             csvwriter = csv.writer(csvfile) 
             csvwriter.writerow(["==Header begins=="])
-            csvwriter.writerow(["PI bw", "PI res", "PI max", "PI min"])
-            csvwriter.writerow([self._pi_bw, self._pi_res, self._pi_max, self._pi_min])
-            csvwriter.writerow(["Projection directions"])
+            csvwriter.writerow(["PI bw", "PI res", "PI max", "PI min", "PL res", "PL num", "No: of proj. directions"])
+            csvwriter.writerow([self._pi_bw, self._pi_res, self._pi_max, self._pi_min, self._pl_res, self._pl_num, self._num_dirs])
+            csvwriter.writerow(["Projection directions:"])
             for row in self._proj_dirs:
                 csvwriter.writerow(row)
             csvwriter.writerow(["==Header ends=="])
@@ -129,13 +129,17 @@ class Surface:
         PI = gd.representations.PersistenceImage(bandwidth=self._pi_bw, weight=lambda x: x[1]**2, \
                                                 im_range=[self._pi_min,self._pi_max,self._pi_min,self._pi_max], resolution=[self._pi_res,self._pi_res])
         if len(preproc.transform([self.st.persistence_intervals_in_dimension(0)])[0]) == 0:
-            self._pi[0][i] = [np.zeros((1, self._pi_res*self._pi_res))]
+            self._pi[0][i] = np.array(np.zeros((1, self._pi_res*self._pi_res)))
+            #print(type(self._pi[0][i]))
         else:
             self._pi[0][i] = PI.fit_transform(preproc.transform([self.st.persistence_intervals_in_dimension(0)]))
+            #print(type(self._pi[0][i]))
         if len(preproc.transform([self.st.persistence_intervals_in_dimension(1)])[0]) == 0:
-            self._pi[1][i] = [np.zeros((1, self._pi_res*self._pi_res))]
+            self._pi[1][i] = np.array(np.zeros((1, self._pi_res*self._pi_res)))
+            #print(type(self._pi[0][i]))
         else:
             self._pi[1][i] = PI.fit_transform(preproc.transform([self.st.persistence_intervals_in_dimension(1)]))
+            #print(type(self._pi[0][i]))
         '''
         plt.imshow(np.flip(np.reshape(self._pi[0][i][0], [self._pi_res,self._pi_res]), 0))
         plt.title("Persistence Image")
@@ -172,8 +176,9 @@ class Surface:
             csvwriter = csv.writer(csvfile) 
             for i in range(len(self._proj_dirs)):
                 self.compute_pi(i)
-                np.savetxt(csvfile, np.reshape(self._pi[0][i][0], [self._pi_res, self._pi_res]))
-                csvwriter.writerow(["=====PI====="])
+                #np.savetxt(csvfile, np.reshape(self._pi[0][i][0], [self._pi_res, self._pi_res]))
+                np.savetxt(csvfile, self._pi[0][i][0])
+                #csvwriter.writerow(["=====PI====="])
 
     def output_pl(self):
         output_file = self._output_file + "_pl.csv"
@@ -182,6 +187,7 @@ class Surface:
             csvwriter = csv.writer(csvfile) 
             for i in range(len(self._proj_dirs)):
                 self.compute_pl(i)
-                np.savetxt(csvfile, np.reshape(self._pl[0][i][0], [self._pl_num, self._pl_res]))
-                csvwriter.writerow(["=====PL====="])
+                #np.savetxt(csvfile, np.reshape(self._pl[0][i][0], [self._pl_num, self._pl_res]))
+                np.savetxt(csvfile, self._pl[0][i][0])
+                #csvwriter.writerow(["=====PL====="])
 

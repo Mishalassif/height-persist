@@ -14,8 +14,8 @@ classes = ['alien', 'ants', 'armadillo', 'bird1', 'bird2', 'camel',
         'man', 'myScissor', 'octopus', 'pliers', 'rabbit', 'santa',
         'shark', 'snake', 'spiders', 'two_balls', 'woman']
 
-classes = ['alien', 'ants', 'armadillo']
-classes = ['alien', 'ants', 'armadillo', 'bird2']
+#classes = ['alien', 'ants', 'armadillo', 'bird2']
+#classes = ['alien', 'ants', 'armadillo', 'camel']
 root_dir = '../datasets/shrec_16'
 
 n_dirs = 30
@@ -57,12 +57,6 @@ for i in range(len(classes)):
     print('Completed featurizing ' + classes[i])
 
 print('Completed featurizing train data')
-
-feature_list = np.array(feature_list)
-n_neigh = 5
-model = KNeighborsClassifier(n_neighbors=n_neigh)
-#model.fit(feature_list, label_list)
-#print('k-NN model fit with k = ' + str(n_neigh))
 
 model = RandomForestClassifier(random_state=1)
 model.fit(feature_list, label_list)
