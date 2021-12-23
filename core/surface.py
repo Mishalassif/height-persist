@@ -37,7 +37,6 @@ class Surface:
         self._pl_num = 5
         self._pl = [[0.0 for i in range(len(self._proj_dirs))] for j in range(2)]
 
-        self._global_2_hom = 0
     def _output_header(self, output_file):
         with open(output_file, "w", newline='') as csvfile:
             csvwriter = csv.writer(csvfile) 
@@ -51,7 +50,7 @@ class Surface:
             csvwriter.writerow([])
     
     def _compute_persistence(self):
-        self.st.compute_persistence(homology_coeff_field=2, persistence_dim_max=2)
+        self.st.compute_persistence(homology_coeff_field=2, persistence_dim_max=1)
         
     def _normalize_dirs(self):
         for i in range(len(self._proj_dirs)):
@@ -62,10 +61,10 @@ class Surface:
             self._proj_dirs[i][1] = self._proj_dirs[i][1]/norm
             self._proj_dirs[i][2] = self._proj_dirs[i][2]/norm
 
-    def _update_obj(self):
-        self.vertices = self._obj_loader.vertices
-        self.faces = self._obj_loader.faces
-        f = len(self._obj_loader.faces)
+    def _update_surf_from_file(self):
+        self.vertices = self._file_loader.vertices
+        self.faces = self._file_loader.faces
+        f = len(self._file_loader.faces)
         for i in range(f):
             for j in range(3):
                 self.faces[i][j] = self.faces[i][j]-1
@@ -102,13 +101,16 @@ class Surface:
             print("Please enter an input OBJ file name")
         else:
             self._clear_st()
-            self._update_obj()
+            self._update_surf_from_file()
             self._update_heights()
             self._update_st()
             
-    def set_input_filename(self, filename):
+    def set_input_filename(self, filename, extension='obj'):
         self._input_file = filename
-        self._obj_loader = ObjLoader(filename+".obj")
+        if extension == '.off':
+            self._file_loader = OffLoader(filename + ".off")
+        else:
+            self._file_loader = ObjLoader(filename + ".obj")
         self._output_file = self._input_file
 
     def set_output_filename(self, filename):

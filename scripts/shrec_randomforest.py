@@ -10,7 +10,7 @@ from sklearn.model_selection import StratifiedKFold
 
 feature = 'pl'
 test_model = True
-online = False
+online = True
 
 classes = ['alien', 'ants', 'armadillo', 'bird1', 'bird2', 'camel',
         'cat', 'centaur', 'dinosaur', 'dino_ske', 'dog1', 'dog2',
