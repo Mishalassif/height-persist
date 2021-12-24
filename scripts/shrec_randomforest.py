@@ -7,10 +7,15 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import classification_report
+from sklearn.pipeline import make_pipeline
+from sklearn.neighbors import KNeighborsClassifier
+
+from metric_learn import NCA
 
 feature = 'pl'
-test_model = True
-online = True
+test_model = False
+online = False
 
 classes = ['alien', 'ants', 'armadillo', 'bird1', 'bird2', 'camel',
         'cat', 'centaur', 'dinosaur', 'dino_ske', 'dog1', 'dog2',
@@ -71,9 +76,15 @@ for i in range(len(classes)):
 
 print('Completed featurizing train data')
 
+
+
 model = RandomForestClassifier(random_state=1)
-scores = cross_val_score(model, feature_list, label_list, cv=3)
-print("%0.2f 3-fold cv accuracy with a standard deviation of %0.2f" % (scores.mean(), scores.std()))
+#model = make_pipeline(NCA(), KNeighborsClassifier())
+nca = NCA(random_state=42)
+nca.fit(feature_list, label_list)
+print('NCA fit')
+#scores = cross_val_score(model, feature_list, label_list, cv=3)
+#print("%0.2f 3-fold cv accuracy with a standard deviation of %0.2f" % (scores.mean(), scores.std()))
 
 if test_model == True:
     model.fit(feature_list, label_list)
@@ -123,4 +134,6 @@ if test_model == True:
             correct_pred_list.append(0)
 
     print("Accuracy on test set: " + str(sum(correct_pred_list)/len(correct_pred_list)))
+    print(classification_report(test_label_list, pred_label_list, target_names=classes))
+
     
