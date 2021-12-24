@@ -26,7 +26,7 @@ class Surface:
         self._num_dirs = 0
         self._heights = []
 
-        self._pi_bw = 1e-2
+        self._pi_bw = 1e-1
         self._pi_res = 20
         self._pi_max = 1.0
         self._pi_min = -1.0
@@ -35,6 +35,8 @@ class Surface:
         self._pl_res = 30
         self._pl_num = 5
         self._pl = [[0.0 for i in range(len(self._proj_dirs))] for j in range(2)]
+
+        self._pd = []
 
     def _output_header(self, output_file):
         with open(output_file, "w", newline='') as csvfile:
@@ -120,6 +122,7 @@ class Surface:
             self._file_loader = OffLoader(filename + ".off")
         else:
             self._file_loader = ObjLoader(filename + ".obj")
+            self._file_loader.center_and_scale()
         self._output_file = self._input_file
 
     def set_output_filename(self, filename):
@@ -200,5 +203,17 @@ class Surface:
                 #np.savetxt(csvfile, np.reshape(self._pl[0][i][0], [self._pl_num, self._pl_res]))
                 np.savetxt(csvfile, self._pl[0][i][0])
                 np.savetxt(csvfile, self._pl[1][i][0])
+                #csvwriter.writerow(["=====PL====="])
+
+    def output_pd(self):
+        output_file = self._output_file + "_pd.csv"
+        self._output_header(output_file)
+        with open(output_file, "a") as csvfile:
+            csvwriter = csv.writer(csvfile) 
+            for i in range(len(self._proj_dirs)):
+                self._compute_persistence()
+                #np.savetxt(csvfile, np.reshape(self._pl[0][i][0], [self._pl_num, self._pl_res]))
+                np.savetxt(csvfile, self.st.persistence_intervals_in_dimension(0))
+                np.savetxt(csvfile, self.st.persistence_intervals_in_dimension(1))
                 #csvwriter.writerow(["=====PL====="])
 

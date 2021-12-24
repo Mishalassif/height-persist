@@ -14,7 +14,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from metric_learn import NCA
 
 feature = 'pl'
-test_model = False
+test_model = True
 online = False
 
 classes = ['alien', 'ants', 'armadillo', 'bird1', 'bird2', 'camel',
@@ -76,15 +76,9 @@ for i in range(len(classes)):
 
 print('Completed featurizing train data')
 
-
-
 model = RandomForestClassifier(random_state=1)
-#model = make_pipeline(NCA(), KNeighborsClassifier())
-nca = NCA(random_state=42)
-nca.fit(feature_list, label_list)
-print('NCA fit')
-#scores = cross_val_score(model, feature_list, label_list, cv=3)
-#print("%0.2f 3-fold cv accuracy with a standard deviation of %0.2f" % (scores.mean(), scores.std()))
+scores = cross_val_score(model, feature_list, label_list, cv=3)
+print("%0.2f 3-fold cv accuracy with a standard deviation of %0.2f" % (scores.mean(), scores.std()))
 
 if test_model == True:
     model.fit(feature_list, label_list)

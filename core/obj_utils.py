@@ -1,4 +1,5 @@
 import os
+import math
 
 class ObjLoader(object):
     def __init__(self, fileName):
@@ -33,6 +34,24 @@ class ObjLoader(object):
             f.close()
         except IOError:
             print(".obj file not found.")
+
+    def center_and_scale(self):
+        mean = [0.0, 0.0, 0.0]
+        for i in range(len(self.vertices)):
+            for j in range(3):
+                mean[j] = mean[j] + self.vertices[i][j]
+        for j in range(3):
+            mean[j] = mean[j]/(len(self.vertices))
+        for i in range(len(self.vertices)):
+            for j in range(3):
+                self.vertices[i][j] = self.vertices[i][j] - mean[j]
+        max_norm = 0.0
+        for i in range(len(self.vertices)):
+            max_norm = max(max_norm, math.sqrt(self.vertices[i][0]**2 +
+                self.vertices[i][1]**2 + self.vertices[i][2]**2))
+        for i in range(len(self.vertices)):
+            for j in range(3):
+                self.vertices[i][j] = self.vertices[i][j]/max_norm
 
 def get_all_obj(root_dir):
     list_of_files = os.listdir(root_dir)

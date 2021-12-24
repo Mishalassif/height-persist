@@ -14,16 +14,16 @@ from sklearn.neighbors import KNeighborsClassifier
 
 from metric_learn import NCA
 
-feature = 'pl'
-test_model = True
+feature = 'pi'
+test_model = False
 online = False
 
-classes = ['bathtub', 'bed']
-
+classes = ['bathtub', 'bed', 'toilet', 'table', 'chair']
+classes  = classes[:5]
 root_dir = '../datasets/red-ModelNet10'
 feature_dir = '../features/red-ModelNet10'
 
-n_dirs = 30
+n_dirs = 20
 
 pdir = fibonacci_semisphere(n_dirs)
 
@@ -40,6 +40,7 @@ else:
 
 for i in range(len(classes)):
     list_obj = get_all_obj(root_dir + '/' + classes[i])
+    count = 0
     for k in range(len(list_obj)):
         list_obj[k] = list_obj[k][len(root_dir + '/' + classes[i]):]
     for obj_file in list_obj:
@@ -67,20 +68,13 @@ for i in range(len(classes)):
             #print(embedding)
             feature_list.append(embedding)
             label_list.append(i)
-        print('Featurized ' + obj_file + ' successfully !!!!')
+        count = count + 1
+        print('Featurized ' + obj_file + '('+str(round(float(count/len(list_obj)),2)*100) +'%) successfully !!!!')
     print('Completed featurizing ' + classes[i])
 
 print('Completed featurizing train data')
 
-'''
-for i in range(len(feature_list)):
-    for j in range(len(feature_list[i])):
-        if math.isnan(feature_list[i][j]):
-            print(str(i) + " " + str(j))
-            print(feature_list[i][j])
-'''
-
-model = RandomForestClassifier(random_state=1)
+model = RandomForestClassifier(random_state=1, n_estimators=200)
 scores = cross_val_score(model, feature_list, label_list, cv=3)
 print("%0.2f 3-fold cv accuracy with a standard deviation of %0.2f" % (scores.mean(), scores.std()))
 
