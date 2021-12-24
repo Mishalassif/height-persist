@@ -20,6 +20,7 @@ def create_feature_dir(root_dir = '../datasets', features_dir = '../features'):
 
 create_feature_dir()
 list_obj = get_all_obj('../datasets/shrec_16')
+list_obj = get_all_obj('../datasets/red-ModelNet10/toilet')
 
 print(list_obj)
 pdir = fibonacci_semisphere(20)
