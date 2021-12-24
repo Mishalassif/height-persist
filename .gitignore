@@ -16,5 +16,6 @@
 *.snm
 *.toc
 *.obj
+*.off
 *.csv
 *.pyc
