@@ -56,11 +56,11 @@ class OffLoader(object):
 
 def get_all_off(root_dir):
     list_of_files = os.listdir(root_dir)
-    list_of_obj = list()
+    list_of_off = list()
     for entry in list_of_files:
         full_path = os.path.join(root_dir, entry)
         if os.path.isdir(full_path):
-            list_of_obj = list_of_obj + get_all_obj(full_path)
+            list_of_off = list_of_off + get_all_off(full_path)
         elif full_path[-4:] == '.off':
-            list_of_obj.append(full_path[:-4])
-    return list_of_obj
+            list_of_off.append(full_path[:-4])
+    return list_of_off
