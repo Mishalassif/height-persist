@@ -19,3 +19,4 @@
 *.off
 *.csv
 *.pyc
+scripts/dataprep/MeshLab/

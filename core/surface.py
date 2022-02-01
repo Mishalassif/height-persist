@@ -26,6 +26,7 @@ class Surface:
         self._num_dirs = 0
         self._heights = []
 
+        #self._pi_bw = 1e-2
         self._pi_bw = 1e-1
         self._pi_res = 20
         self._pi_max = 1.0
@@ -206,7 +207,7 @@ class Surface:
                 #csvwriter.writerow(["=====PL====="])
 
     def output_pd(self):
-        output_file = self._output_file + "_pd.csv"
+        output_file = self._output_file + "_pd0.csv"
         self._output_header(output_file)
         with open(output_file, "a") as csvfile:
             csvwriter = csv.writer(csvfile) 
@@ -214,6 +215,17 @@ class Surface:
                 self._compute_persistence()
                 #np.savetxt(csvfile, np.reshape(self._pl[0][i][0], [self._pl_num, self._pl_res]))
                 np.savetxt(csvfile, self.st.persistence_intervals_in_dimension(0))
+        
+        output_file = self._output_file + "_pd1.csv"
+        self._output_header(output_file)
+        with open(output_file, "a") as csvfile:
+            csvwriter = csv.writer(csvfile) 
+            for i in range(len(self._proj_dirs)):
+                self._compute_persistence()
+                #np.savetxt(csvfile, np.reshape(self._pl[0][i][0], [self._pl_num, self._pl_res]))
                 np.savetxt(csvfile, self.st.persistence_intervals_in_dimension(1))
-                #csvwriter.writerow(["=====PL====="])
-
+    
+    def pi_from_pd(self, pd):
+        pd0 = np.genfromtext(self._output_file + "_pd0.csv", delimiter="\n", skip_header=self._header_len)
+        pd1 = np.genfromtext(self._output_file + "_pd0.csv", delimiter="\n", skip_header=self._header_len)
+            

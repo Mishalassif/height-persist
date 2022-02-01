@@ -1,4 +1,5 @@
 import os
+import math
 from core.surface import *
 from core.sphere_sampler import *
 from core.obj_utils import *
@@ -19,10 +20,8 @@ def create_feature_dir(root_dir = '../datasets', features_dir = '../features'):
             create_feature_dir(full_path, full_feature_path)
 
 create_feature_dir()
-list_obj = get_all_obj('../datasets/shrec_16/alien')
-list_obj = get_all_obj('../datasets/red-ModelNet10')
+list_obj = get_all_obj('../datasets/red-ModelNet10/bed')
 
-print(list_obj)
 pdir = fibonacci_semisphere(20)
 
 for i in range(len(list_obj)):
@@ -31,20 +30,17 @@ for i in range(len(list_obj)):
 surf = Surface()
 surf.set_proj_dirs(pdir)
 
-cont = ''
-cont = input("About to overwrite the features folder, are you sure you want to continue? (y/n)")
-
-if cont == 'y':
-    count = 0
-    size = len(list_obj)
-    for obj_file in list_obj:
-        count = count+1
-        surf.set_input_filename('../datasets/' + obj_file)
-        surf.set_output_filename('../features/' + obj_file)
-        surf.update_surface()
-        surf.output_pi()
-        surf.output_pl()
-        #surf.output_pd()
-        print('Featurized ' + obj_file + '(' + str(round(float(count)/size,2)*100) + '%) successfully !!!!')
-else:
-    print("Aborting")
+for obj_file in list_obj:
+    surf.set_input_filename('../datasets/' + obj_file)
+    surf.set_output_filename('../features/' + obj_file)
+    surf.update_surface()
+    surf._compute_persistence()
+    #print(surf.st.persistence_intervals_in_dimension(2))
+    #print(len(surf.st.persistence_intervals_in_dimension(2)))
+    hom_pairs = surf.st.persistence_intervals_in_dimension(1)
+    hom = 0
+    for pair in hom_pairs:
+        if pair[1] == math.inf:
+            hom = hom+1
+    #print("Homology of " obj_file + " is " + str(hom))
+    print(hom)
