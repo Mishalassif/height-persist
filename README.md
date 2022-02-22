@@ -34,10 +34,13 @@ persistence diagrams inside a features folder maintaining the directory structur
 
 - scripts/modelnet_randomforest.py: Randomforest classifier for the [ModelNet40](https://modelnet.cs.princeton.edu/) dataset.
 
+- scripts/dataprep: Various tools for preprocessing the CAD models.
+
 ### test
 
 Various simple test routines for the functions in core.
 
 ## Notes
 
-We obtain around 80% test set accuracy in the ModelNet40 dataset using a simple RandomForest classifier with 100 nodes.
+- The CAD models are preprocessed by reducing the number of faces to 2000 and converting to manifolds. 
+- We obtain around 80% test set accuracy in the ModelNet40 dataset using a simple RandomForest classifier with 100 nodes.
