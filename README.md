@@ -2,7 +2,7 @@
 
 *3D object classification using the Persistent Homology Transform (PHT).*
 
-This project contains code for classifying 3D objects in the form of CAD models using the 
+This project contains code for classifying 3D objects in the form of CAD models using  
 Persistent homology transform (PHT). More information about the PHT can be found in the paper
 [Persistent homology transform for modeling shapes and surfaces](https://doi.org/10.1093/imaiai/iau011). 
 
@@ -38,4 +38,6 @@ persistence diagrams inside a features folder maintaining the directory structur
 
 Various simple test routines for the functions in core.
 
-80% test set accuracy on ModelNet40. 
+## Notes
+
+We obtain around 80% test set accuracy in the ModelNet40 dataset using a simple RandomForest classifier with 100 nodes.
