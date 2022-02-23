@@ -1,0 +1,10 @@
+#!/bin/bash
+#SBATCH --job-name="dataprep_r"
+#SBATCH --output="r.out"
+#SBATCH --error="r.err"
+#SBATCH --partition=cpun4
+#SBATCH --time=4
+
+module load opence
+python red-modelnet10.py radio
+python red-modelnet10.py range_hood

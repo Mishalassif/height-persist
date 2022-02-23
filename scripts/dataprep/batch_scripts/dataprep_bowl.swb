@@ -1,0 +1,9 @@
+#!/bin/bash
+#SBATCH --job-name="dataprep_bowl"
+#SBATCH --output="bowl.out"
+#SBATCH --error="bowl.err"
+#SBATCH --partition=cpun4
+#SBATCH --time=4
+
+module load opence
+python red-modelnet10.py bowl

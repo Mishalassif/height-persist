@@ -1,0 +1,10 @@
+#!/bin/bash
+#SBATCH --job-name="dataprep_c"
+#SBATCH --output="c.out"
+#SBATCH --error="c.err"
+#SBATCH --partition=cpun4
+#SBATCH --time=4
+
+module load opence
+python red-modelnet10.py car &
+python red-modelnet10.py chair 

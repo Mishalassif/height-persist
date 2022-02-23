@@ -1,0 +1,2 @@
+simplify: /home/mishal2/height-persist/scripts/dataprep/Manifold-master/3rd/igl/collapse_edge.cpp:46: bool igl::collapse_edge(int, const RowVectorXd&, Eigen::MatrixXd&, Eigen::MatrixXi&, Eigen::MatrixXi&, Eigen::VectorXi&, Eigen::MatrixXi&, Eigen::MatrixXi&, int&, int&, int&, int&): Assertion `s<d && "s should be less than d"' failed.
+timeout: the monitored command dumped core

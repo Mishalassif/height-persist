@@ -1,0 +1,12 @@
+#!/bin/bash
+#SBATCH --job-name="dataprep_t"
+#SBATCH --output="t.out"
+#SBATCH --error="t.err"
+#SBATCH --partition=cpun1
+#SBATCH --time=4
+
+module load opence
+python red-modelnet10.py table
+python red-modelnet10.py tent
+python red-modelnet10.py toilet
+python red-modelnet10.py tv_stand

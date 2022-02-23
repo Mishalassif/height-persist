@@ -1,0 +1,9 @@
+#!/bin/bash
+#SBATCH --job-name="dataprep_bench"
+#SBATCH --output="bench.out"
+#SBATCH --error="bench.err"
+#SBATCH --partition=cpun1
+#SBATCH --time=4
+
+module load opence
+python red-modelnet10.py bench/train

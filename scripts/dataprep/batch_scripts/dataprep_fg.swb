@@ -1,0 +1,11 @@
+#!/bin/bash
+#SBATCH --job-name="dataprep_fg"
+#SBATCH --output="fg.out"
+#SBATCH --error="fg.err"
+#SBATCH --partition=cpun4
+#SBATCH --time=4
+
+module load opence
+python red-modelnet10.py flower_pot
+python red-modelnet10.py glass_box
+python red-modelnet10.py guitar

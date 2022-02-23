@@ -1,0 +1,11 @@
+#!/bin/bash
+#SBATCH --job-name="dataprep_vwx"
+#SBATCH --output="vwx.out"
+#SBATCH --error="vwx.err"
+#SBATCH --partition=cpun1
+#SBATCH --time=4
+
+module load opence
+python red-modelnet10.py vase
+python red-modelnet10.py wardrobe
+python red-modelnet10.py xbox
