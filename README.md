@@ -32,7 +32,9 @@ persistence diagrams inside a features folder maintaining the directory structur
 
 - scripts/install_script.bash: This script needs to be run to install the core functions to be used by the scripts.
 
-- scripts/modelnet_randomforest.py: Randomforest classifier for the [ModelNet40](https://modelnet.cs.princeton.edu/) dataset.
+- scripts/randomforest: Randomforest classifier for the [ModelNet40](https://modelnet.cs.princeton.edu/) dataset.
+
+- scripts/pytorch: Neural network classifier for the [ModelNet40](https://modelnet.cs.princeton.edu/) dataset (in progress). 
 
 - scripts/dataprep: Various tools for preprocessing the CAD models.
 
