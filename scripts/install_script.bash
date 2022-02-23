@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-export PYTHONPATH=/home/mishal/Documents/Code/Mesh:/home/mishal/Documents/Code/Mesh/height-persist
+export PYTHONPATH=/home/mishal2:/home/mishal2/height-persist

@@ -1,0 +1,9 @@
+#!/bin/bash
+#SBATCH --job-name="nn"
+#SBATCH --output="nn.out"
+#SBATCH --error="nn.err"
+#SBATCH --partition=gpux2
+#SBATCH --time=10
+
+module load wmlce
+python nn.py

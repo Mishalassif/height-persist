@@ -6,24 +6,26 @@ from core.obj_utils import *
 
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import AdaBoostClassifier
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import classification_report
 from sklearn.pipeline import make_pipeline
 from sklearn.neighbors import KNeighborsClassifier
 
-from metric_learn import NCA
-
 feature = 'pi'
-test_model = True
+test_model = False
 cv_model = True
 online = False
 
-classes = ['bathtub', 'bed', 'toilet', 'table', 'chair', 'desk', 'dresser', 
-        'monitor', 'night_stand', 'sofa']
-classes[8:9]
-root_dir = '../datasets/red-ModelNet10'
-feature_dir = '../features/red-ModelNet10'
+def print(x):
+    os.system('echo ' + '\'' + x + '\'')
+
+
+classes = ['airplane', 'bathtub', 'bed', 'bench', 'bookshelf', 'bottle', 'bowl', 'car', 'chair', 'cone', 'cup', 'curtain', 'desk', 'door', 'dresser', 'flower_pot', 'glass_box', 'guitar', 'keyboard', 'lamp', 'laptop', 'mantel', 'monitor', 'night_stand', 'person', 'piano', 'plant', 'radio', 'range_hood', 'sink', 'sofa', 'stairs', 'stool', 'table', 'tent', 'toilet', 'tv_stand', 'vase', 'wardrobe', 'xbox']
+
+root_dir = '../datasets/ModelNet40-2000'
+feature_dir = '../features/ModelNet40-2000'
 
 n_dirs = 20
 
@@ -76,7 +78,8 @@ for i in range(len(classes)):
 
 print('Completed featurizing train data')
 
-model = RandomForestClassifier(random_state=1, n_estimators=200)
+#model = RandomForestClassifier(random_state=1, n_estimators=100)
+model = AdaBoostClassifier(random_state=1, n_estimators=100)
 if cv_model == True:
     scores = cross_val_score(model, feature_list, label_list, cv=3)
     print("%0.2f 3-fold cv accuracy with a standard deviation of %0.2f" % (scores.mean(), scores.std()))

@@ -1,0 +1,2 @@
+/usr/share/lmod/lmod/init/bash: line 70: conda: command not found
+slurmstepd: error: *** JOB 31475 ON hal11 CANCELLED AT 2022-02-22T18:39:16 ***
