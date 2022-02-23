@@ -5,7 +5,7 @@ from core.off_utils import *
 manifold_path = './manifold'
 simplify_path = './simplify'
 
-root_dir = '../../datasets/ModelNet10/bathtub'
+root_dir = '../../datasets/ModelNet10/bathtub/test'
 tmp_file = 'tmp.obj'
 tmp2_file = 'tmp2.obj'
 list_off = get_all_off(root_dir)
