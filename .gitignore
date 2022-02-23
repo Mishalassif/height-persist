@@ -20,3 +20,5 @@
 *.csv
 *.pyc
 scripts/dataprep/MeshLab/
+datasets
+features
