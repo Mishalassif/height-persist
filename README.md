@@ -7,8 +7,8 @@ Persistent homology transform (PHT). More information about the PHT can be found
 [Persistent homology transform for modeling shapes and surfaces](https://doi.org/10.1093/imaiai/iau011). 
 
 <p float="left">
-  <img src="images/guitar_0155.png" width="100" />
-  <img src="images/guitar.png" width="100" /> 
+  <img src="images/guitar_0155.png" width="300" />
+  <img src="images/guitar.png" width="300" /> 
 </p>
 
 
