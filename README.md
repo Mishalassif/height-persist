@@ -28,19 +28,6 @@ folder.
 
 - core/off_utils.py: Loads offf files into python.
 
-<br>
-
-<img src="images/guitar_0155.png" alt="Guitar" width="300"/>
-
-<br>
-
-<img src="images/night_stand_0200.png" alt="Night Stand" width="200"/>
-
-
-![Guitar](images/guitar_0155.png)
-
-![Night stand](images/night_stand_0200.png)
-
 ### scripts
 
 Contains various scripts for preprocessing the CAD models, generating the persistence diagrams

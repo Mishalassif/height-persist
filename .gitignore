@@ -19,6 +19,7 @@
 *.off
 *.csv
 *.pyc
+*.ipynb_checkpoints
 scripts/dataprep/MeshLab/
 datasets
 features
