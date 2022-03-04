@@ -6,13 +6,23 @@ This project contains code for classifying 3D objects in the form of CAD models 
 Persistent homology transform (PHT). More information about the PHT can be found in the paper
 [Persistent homology transform for modeling shapes and surfaces](https://doi.org/10.1093/imaiai/iau011). 
 
+### examples
+
+A few CAD models along with their PHT representation.
 
 <p align="center">
-  <img src="images/night_stand_0200.png" width="300" />
+  <img src="images/chair_0889.png" width="300" />
     &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp   &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-  <img src="images/night.png" width="300" /> 
+  <img src="images/chair.png" width="350" /> 
 </p>
 
+<br>
+
+<p align="center">
+  <img src="images/night_stand_0200.png" height="300" width="300"/>
+    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp   &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+  <img src="images/night.png" width="350" /> 
+</p>
 
 ## Files
 
